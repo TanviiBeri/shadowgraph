@@ -1,0 +1,16 @@
+# Python virtual environment
+venv/
+
+# Python cache files
+__pycache__/
+*.pyc
+
+# Environment variables / API keys — NEVER commit these
+.env
+
+# Generated data — regenerate via src/data_gen.py, keeps repo lightweight
+data/*.csv
+data/*.json
+
+# OS-specific junk files
+.DS_Store

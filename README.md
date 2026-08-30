@@ -20,15 +20,23 @@ ShadowGraph adds a second, independent detection layer: **behavioral synchrony**
 
 ## Results
 
-On the synthetic evaluation set (431 accounts, 3,207 transactions, 7 rings — 4 naive, 3 evasive):
+**Development set** (431 accounts, 3,207 transactions, 7 rings — thresholds were designed against this data):
 
 | Metric | Value |
 |---|---|
 | Precision | 100% |
 | Recall | 100% |
-| False positives (on 400 normal accounts) | 0 |
-| Evasive rings caught with zero shared identifiers | 3/3 |
+| False positives | 0 / 400 normal accounts |
 
+**Held-out test set** (381 accounts, 2,776 transactions, different random seed, different ring counts/sizes — detector thresholds used completely unchanged):
+
+| Metric | Value |
+|---|---|
+| Precision | 100% |
+| Recall | 100% |
+| False positives | 0 / 350 normal accounts |
+
+Run `python3 tests/evaluate.py` (development set) or `python3 tests/holdout_eval.py` (held-out set) to reproduce.
 Run `python3 tests/evaluate.py` to reproduce.
 
 ## Honest limitations

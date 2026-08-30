@@ -14,3 +14,7 @@ data/*.json
 
 # OS-specific junk files
 .DS_Store
+
+data/holdout/*.csv
+data/holdout/*.json
+!data/holdout/evaluation_results.json

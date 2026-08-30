@@ -1,0 +1,14 @@
+{
+  "total_accounts": 381,
+  "actual_fraud_accounts": 31,
+  "flagged_accounts": 31,
+  "true_positives": 31,
+  "false_positives": 0,
+  "false_negatives": 0,
+  "precision": 1.0,
+  "recall": 1.0,
+  "f1_score": 1.0,
+  "false_positive_rate_on_normal_users": 0.0,
+  "false_positive_accounts": [],
+  "false_negative_accounts": []
+}

@@ -71,6 +71,15 @@ Then, optionally:
 python3 tests/evaluate.py       # precision/recall against ground truth
 python3 tests/stress_test.py    # false-positive stress test
 ```
+## Dashboard (recommended)
+
+Instead of reading raw JSON, run the risk-analyst dashboard:
+
+```bash
+python3 src/dashboard.py
+```
+
+Then open http://localhost:5000. It shows every flagged ring as a card — evidence, risk level, the agent's adversarial self-check — with real **Approve**/**Override** buttons for gated high-severity decisions. Every click writes directly to `data/audit_log.jsonl`, the same append-only trail described above. A "Run new detection pass" button re-triggers the full pipeline from the UI.
 
 ## What's next
 

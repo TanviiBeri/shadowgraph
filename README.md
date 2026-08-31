@@ -41,9 +41,9 @@ Run `python3 tests/evaluate.py` to reproduce.
 
 ## Honest limitations
 
-A perfect score on a dataset we generated ourselves isn't the whole story, and we don't want to present it as one. `tests/stress_test.py` deliberately stress-tests the synchrony detector against **coincidental** normal behavior — independent users who happen to transact at common round prices (₹999, ₹1999) around similar times, with zero actual collusion.
+A perfect score on data we generated ourselves isn't the whole story. `tests/stress_test.py` deliberately stress-tests the synchrony detector against two false-positive risks: (1) a genuine flash sale — 40 fully independent accounts paying the same popular price within minutes, zero collusion — and (2) small groups of unrelated accounts that repeatedly, coincidentally collide on timing and price.
 
-**Finding:** at the current threshold (`MIN_SYNC_EVENTS = 2`), coincidence clusters with 2+ accidental time/amount collisions get wrongly flagged. This is a real precision/recall tradeoff, not a bug — a stricter threshold reduces false positives but risks missing evasive rings that coordinate only 2-3 times. In production, this threshold would be tuned against real transaction volume, and it's why lower-confidence rings are routed to `flag_for_review` (human judgment) rather than automatic `suspend_accounts`.
+**Finding:** the detector adaptively weights synchrony evidence by how statistically common a price point is platform-wide (mean + 2.5 standard deviations across the dataset's own amount distribution). This correctly eliminates false positives from genuine high-volume events like flash sales — the scenario that matters most in production. It does **not** eliminate flags on small, *repeated* coincidences between the same specific accounts, even at an ordinary price — because that pattern is genuinely statistically unusual regardless of price popularity, and we judged it's still worth a human's attention (routed to `flag_for_review`, never an automatic high-severity action).
 
 Run `python3 tests/stress_test.py` to reproduce.
 

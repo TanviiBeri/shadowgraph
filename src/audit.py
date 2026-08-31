@@ -139,6 +139,34 @@ def main():
         tag = "GATED — needs human approval" if entry["gated"] else "auto-approved (low severity)"
         print(f"Logged entry #{entry['entry_id']}: {entry['recommended_action']} [{tag}]")
 
+def get_decision_entries_with_status():
+    """
+    Used by the dashboard: merges original decision entries with any
+    later human_review entries that resolved them, producing one clean
+    list where every decision shows its FINAL status (pending, approved,
+    or overridden), who reviewed it, and why.
+    """
+    entries = load_all_entries()
+    decisions = [e for e in entries if e.get("type") != "human_review"]
+    reviews = [e for e in entries if e.get("type") == "human_review"]
+
+    review_by_entry = {}
+    for r in reviews:
+        review_by_entry[r["reviews_entry_id"]] = r
+
+    for d in decisions:
+        review = review_by_entry.get(d["entry_id"])
+        if review:
+            d["final_status"] = review["decision"]
+            d["reviewed_by"] = review["reviewed_by"]
+            d["review_reason"] = review["reason"]
+            d["review_timestamp"] = review["timestamp"]
+        else:
+            d["final_status"] = d["status"]
+
+    decisions.sort(key=lambda d: d["entry_id"], reverse=True)
+    return decisions
+
     print_pending_approvals()
     print(f"Full audit trail written to {AUDIT_LOG_PATH}")
 
